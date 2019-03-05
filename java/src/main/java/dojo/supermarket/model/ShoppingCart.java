@@ -35,16 +35,17 @@ class ShoppingCart {
     }
 
     void handleOffers(Receipt receipt, List<Offer> offers, SupermarketCatalog catalog) {
+        NewOffer newOffer = (product, quantity, unitPrice) -> Stream.empty();
+        for (Offer offer: offers) {
+            newOffer = newOffer.and(createNewOffer(offer));
+        }
         for (Product product: productQuantities().keySet()) {
-            for (Offer offer: offers) {
-                Stream<Discount> discounts = createNewOffer(offer)
-                    .getDiscounts(
-                        product,
-                        productQuantities.get(product),
-                        catalog.getUnitPrice(product)
-                    );
-                discounts.forEach(receipt::addDiscount);
-            }
+            Stream<Discount> discounts = newOffer.getDiscounts(
+                    product,
+                    productQuantities.get(product),
+                    catalog.getUnitPrice(product)
+                );
+            discounts.forEach(receipt::addDiscount);
         }
     }
 
