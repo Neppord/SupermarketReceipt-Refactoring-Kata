@@ -13,7 +13,7 @@ class Teller {
     }
 
     void addSpecialOffer(Offer offer) {
-        offers = offers.and(offer);
+        offers = offers.concat(offer);
     }
 
     Receipt checksOutArticlesFrom(ShoppingCart theCart) {
