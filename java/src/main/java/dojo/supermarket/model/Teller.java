@@ -14,8 +14,25 @@ class Teller {
     }
 
     void addSpecialOffer(SpecialOfferType offerType, Product product, double argument) {
-        Offer offer = new Offer(offerType, product, argument);
-        addSpecialOffer(offer.createNewOffer());
+        switch (offerType) {
+            case ThreeForTwo: {
+                NewOffer newOffer = new Offer(SpecialOfferType.ThreeForTwo, product, argument).createNewOffer();
+                addSpecialOffer(newOffer);
+            } break;
+            case TwoForAmount: {
+                NewOffer newOffer = new Offer(SpecialOfferType.TwoForAmount, product, argument).createNewOffer();
+                addSpecialOffer(newOffer);
+            } break;
+            case FiveForAmount: {
+                NewOffer newOffer = new Offer(SpecialOfferType.FiveForAmount, product, argument).createNewOffer();
+                addSpecialOffer(newOffer);
+            } break;
+            case TenPercentDiscount: {
+                NewOffer newOffer = new Offer(SpecialOfferType.TenPercentDiscount, product, argument).createNewOffer();
+                addSpecialOffer(newOffer);
+                break;
+            }
+        }
     }
 
     private void addSpecialOffer(NewOffer offer) {
