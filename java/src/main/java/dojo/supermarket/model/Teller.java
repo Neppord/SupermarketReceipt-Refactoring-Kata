@@ -18,6 +18,13 @@ class Teller {
 
     Receipt checksOutArticlesFrom(ShoppingCart theCart) {
         Receipt receipt = new Receipt();
+        handleProducts(theCart, receipt);
+        theCart.handleOffers(receipt, this.catalog, offers);
+
+        return receipt;
+    }
+
+    private void handleProducts(ShoppingCart theCart, Receipt receipt) {
         List<ProductQuantity> productQuantities = theCart.getItems();
         for (ProductQuantity pq: productQuantities) {
             Product p = pq.getProduct();
@@ -26,9 +33,6 @@ class Teller {
             double price = quantity * unitPrice;
             receipt.addProduct(p, quantity, unitPrice, price);
         }
-        theCart.handleOffers(receipt, this.catalog, offers);
-
-        return receipt;
     }
 
 }
