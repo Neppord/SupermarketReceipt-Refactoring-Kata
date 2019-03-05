@@ -7,14 +7,15 @@ import java.util.stream.Stream;
 class Teller {
 
     private final SupermarketCatalog catalog;
-    private List<Offer> offers = new LinkedList<>();
+    private NewOffer newOffers = (product, quantity, unitPrice) -> Stream.empty();
 
     Teller(SupermarketCatalog catalog) {
         this.catalog = catalog;
     }
 
     void addSpecialOffer(SpecialOfferType offerType, Product product, double argument) {
-        this.offers.add(new Offer(offerType, product, argument));
+        Offer offer = new Offer(offerType, product, argument);
+        newOffers = newOffers.and(offer.createNewOffer());
     }
 
     Receipt checksOutArticlesFrom(ShoppingCart theCart) {
@@ -27,11 +28,7 @@ class Teller {
             double price = quantity * unitPrice;
             receipt.addProduct(p, quantity, unitPrice, price);
         }
-        NewOffer newOffer = (product, quantity, unitPrice) -> Stream.empty();
-        for (Offer offer: offers) {
-            newOffer = newOffer.and(offer.createNewOffer());
-        }
-        theCart.handleOffers(receipt, this.catalog, newOffer);
+        theCart.handleOffers(receipt, this.catalog, newOffers);
 
         return receipt;
     }
