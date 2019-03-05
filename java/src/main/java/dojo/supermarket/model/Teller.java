@@ -12,25 +12,7 @@ class Teller {
         this.catalog = catalog;
     }
 
-    void addSpecialOffer(SpecialOfferType offerType, Product product, double argument) {
-        switch (offerType) {
-            case ThreeForTwo: {
-                addSpecialOffer(product.threeForTwo());
-            } break;
-            case TwoForAmount: {
-                addSpecialOffer(product.twoForAmount(argument));
-            } break;
-            case FiveForAmount: {
-                addSpecialOffer(product.fiveForAmount(argument));
-            } break;
-            case TenPercentDiscount: {
-                addSpecialOffer(product.percentDiscount(argument));
-                break;
-            }
-        }
-    }
-
-    private void addSpecialOffer(Offer offer) {
+    void addSpecialOffer(Offer offer) {
         offers = offers.and(offer);
     }
 
