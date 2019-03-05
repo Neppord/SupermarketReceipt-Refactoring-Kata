@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ShoppingCart {
+class ShoppingCart {
 
     private final List<ProductQuantity> items = new ArrayList<>();
-    Map<Product, Double> productQuantities = new HashMap<>();
+    private Map<Product, Double> productQuantities = new HashMap<>();
 
 
     List<ProductQuantity> getItems() {
@@ -19,12 +19,12 @@ public class ShoppingCart {
         this.addItemQuantity(product, 1.0);
     }
 
-    Map<Product, Double> productQuantities() {
+    private Map<Product, Double> productQuantities() {
         return productQuantities;
     }
 
 
-    public void addItemQuantity(Product product, double quantity) {
+    void addItemQuantity(Product product, double quantity) {
         items.add(new ProductQuantity(product, quantity));
         if (productQuantities.containsKey(product)) {
             productQuantities.put(product, productQuantities.get(product) + quantity);
