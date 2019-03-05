@@ -20,10 +20,6 @@ class ShoppingCart {
         this.addItemQuantity(product, 1.0);
     }
 
-    private Map<Product, Double> productQuantities() {
-        return productQuantities;
-    }
-
 
     void addItemQuantity(Product product, double quantity) {
         items.add(new ProductQuantity(product, quantity));
