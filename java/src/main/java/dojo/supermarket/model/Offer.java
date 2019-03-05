@@ -2,12 +2,12 @@ package dojo.supermarket.model;
 
 import java.util.stream.Stream;
 
-public class Offer {
-    SpecialOfferType offerType;
+class Offer {
+    private SpecialOfferType offerType;
     private final Product product;
-    double argument;
+    private double argument;
 
-    public Offer(SpecialOfferType offerType, Product product, double argument) {
+    Offer(SpecialOfferType offerType, Product product, double argument) {
         this.offerType = offerType;
         this.argument = argument;
         this.product = product;
