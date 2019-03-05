@@ -15,56 +15,16 @@ class Teller {
     void addSpecialOffer(SpecialOfferType offerType, Product product, double argument) {
         switch (offerType) {
             case ThreeForTwo: {
-                Offer offer = (Product product1, double quantity, double unitPrice) -> {
-                    if (product.equals(product1)) {
-                        if ((int) quantity > 2) {
-                            int numberOfXs = (int) quantity / 3;
-                            double discountAmount = quantity * unitPrice - ((numberOfXs * 2 * unitPrice) + (int) quantity % 3 * unitPrice);
-                            return Stream.of(new Discount(product1, "3 for 2", discountAmount));
-                        }
-                    }
-                    return Stream.empty();
-                };
-                addSpecialOffer(offer);
+                addSpecialOffer(product.threeForTwo());
             } break;
             case TwoForAmount: {
-                Offer offer = (Product product1, double quantity, double unitPrice) -> {
-                    if (product.equals(product1)) {
-                        if ((int) quantity >= 2) {
-                            double total = argument * (int) quantity / 2 + (int) quantity % 2 * unitPrice;
-                            double discountN = unitPrice * quantity - total;
-                            return Stream.of(new Discount(product1, "2 for " + argument, discountN));
-                        }
-                    }
-                    return Stream.empty();
-                };
-                addSpecialOffer(offer);
+                addSpecialOffer(product.twoForAmount(argument));
             } break;
             case FiveForAmount: {
-                Offer offer = (Product product1, double quantity, double unitPrice) -> {
-                    if (product.equals(product1)) {
-                        int numberOfXs = (int) quantity / 5;
-                        if ((int) quantity >= 5) {
-                            double discountTotal = unitPrice * quantity - (argument * numberOfXs + (int) quantity % 5 * unitPrice);
-                            return Stream.of(new Discount(product1, 5 + " for " + argument, discountTotal));
-                        }
-                    }
-                    return Stream.empty();
-                };
-                addSpecialOffer(offer);
+                addSpecialOffer(product.fiveForAmount(argument));
             } break;
             case TenPercentDiscount: {
-                Offer offer = (Product product1, double quantity, double unitPrice) -> {
-                    if (product.equals(product1)) {
-                        return Stream.of(new Discount(
-                            product1,
-                            argument + "% off",
-                            quantity * unitPrice * argument / 100.0
-                        ));
-                    }
-                    return Stream.empty();
-                };
-                addSpecialOffer(offer);
+                addSpecialOffer(product.percentDiscount(argument));
                 break;
             }
         }
