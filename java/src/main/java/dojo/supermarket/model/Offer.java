@@ -28,4 +28,8 @@ public interface Offer {
                 );
             });
     }
+
+    static Stream<Discount> emptyOffer(Product product, double quantity, double unitPrice) {
+        return Stream.empty();
+    }
 }

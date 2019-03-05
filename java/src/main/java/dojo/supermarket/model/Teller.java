@@ -1,12 +1,11 @@
 package dojo.supermarket.model;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 class Teller {
 
     private final SupermarketCatalog catalog;
-    private Offer offers = (product, quantity, unitPrice) -> Stream.empty();
+    private Offer offers = Offer::emptyOffer;
 
     Teller(SupermarketCatalog catalog) {
         this.catalog = catalog;
