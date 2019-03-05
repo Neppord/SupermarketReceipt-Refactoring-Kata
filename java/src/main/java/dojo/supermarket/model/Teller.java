@@ -5,13 +5,17 @@ import java.util.List;
 class Teller {
 
     private final SupermarketCatalog catalog;
-    private Offer offers = Offer::emptyOffer;
+    private BundleOffer offers = Offer.convert(Offer::emptyOffer).toBundleOffer();
 
     Teller(SupermarketCatalog catalog) {
         this.catalog = catalog;
     }
 
     void addSpecialOffer(Offer offer) {
+        addSpecialOffer(offer.toBundleOffer());
+    }
+
+    void addSpecialOffer(BundleOffer offer) {
         offers = offers.concat(offer);
     }
 
@@ -23,7 +27,7 @@ class Teller {
     }
 
     private void handleOffers(ShoppingCart theCart, Receipt receipt) {
-        offers.toBundleOffer()
+        offers
             .getDiscounts(theCart.getProductQuantities(), this.catalog)
             .forEach(receipt::addDiscount);
     }

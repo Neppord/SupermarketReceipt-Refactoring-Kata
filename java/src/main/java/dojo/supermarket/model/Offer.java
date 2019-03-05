@@ -29,6 +29,10 @@ public interface Offer {
             });
     }
 
+    static Offer convert(Offer offer) {
+        return offer;
+    }
+
     static Stream<Discount> emptyOffer(Product product, double quantity, double unitPrice) {
         return Stream.empty();
     }
