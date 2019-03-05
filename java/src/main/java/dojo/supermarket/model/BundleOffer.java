@@ -7,7 +7,7 @@ public interface BundleOffer {
 
     Stream<Discount> getDiscounts(Map<Product, Double> productQuantities, SupermarketCatalog catalog);
 
-    default BundleOffer and(BundleOffer other) {
+    default BundleOffer togetherWith(BundleOffer other) {
         return (productQuantities, catalog) -> {
             if(this.getDiscounts(productQuantities, catalog).findAny().isPresent()) {
                 return this.concat(other).getDiscounts(productQuantities, catalog);

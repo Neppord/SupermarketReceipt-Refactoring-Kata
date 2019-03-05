@@ -13,6 +13,7 @@ public class SupermarketTest {
     private Product rice;
     private Product apples;
     private Product cherryTomatoes;
+    private Product toothpaste;
 
     @BeforeEach
     public void setUp() {
@@ -22,6 +23,8 @@ public class SupermarketTest {
 
         toothbrush = new Product("toothbrush", ProductUnit.Each);
         catalog.addProduct(toothbrush, 0.99);
+        toothpaste = new Product("toothpaste", ProductUnit.Each);
+        catalog.addProduct(toothpaste, 1.79);
         rice = new Product("rice", ProductUnit.Each);
         catalog.addProduct(rice, 2.99);
         apples = new Product("apples", ProductUnit.Kilo);
@@ -126,6 +129,21 @@ public class SupermarketTest {
     public void FiveForY_discount_withFour() {
         theCart.addItemQuantity(apples, 4);
         teller.addSpecialOffer(apples.fiveForAmount(6.99));
+        Receipt receipt = teller.checksOutArticlesFrom(theCart);
+        Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
+    }
+
+    @Test
+    void two_products_with_ten_percent_of_in_bundle() {
+        theCart.addItem(toothbrush);
+        theCart.addItem(toothpaste);
+        teller.addSpecialOffer(
+            toothbrush
+                .percentDiscount(10)
+                .togetherWith(
+                    toothpaste.percentDiscount(10).toBundleOffer()
+                )
+        );
         Receipt receipt = teller.checksOutArticlesFrom(theCart);
         Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
     }

@@ -29,6 +29,10 @@ public interface Offer {
             });
     }
 
+    default BundleOffer togetherWith(BundleOffer other) {
+        return this.toBundleOffer().togetherWith(other);
+    }
+
     static Offer convert(Offer offer) {
         return offer;
     }
