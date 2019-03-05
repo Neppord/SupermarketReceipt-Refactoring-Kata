@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 class Teller {
 
     private final SupermarketCatalog catalog;
-    private NewOffer newOffers = (product, quantity, unitPrice) -> Stream.empty();
+    private Offer offers = (product, quantity, unitPrice) -> Stream.empty();
 
     Teller(SupermarketCatalog catalog) {
         this.catalog = catalog;
@@ -15,7 +15,7 @@ class Teller {
     void addSpecialOffer(SpecialOfferType offerType, Product product, double argument) {
         switch (offerType) {
             case ThreeForTwo: {
-                NewOffer newOffer = (Product product1, double quantity, double unitPrice) -> {
+                Offer offer = (Product product1, double quantity, double unitPrice) -> {
                     if (product.equals(product1)) {
                         if ((int) quantity > 2) {
                             int numberOfXs = (int) quantity / 3;
@@ -25,10 +25,10 @@ class Teller {
                     }
                     return Stream.empty();
                 };
-                addSpecialOffer(newOffer);
+                addSpecialOffer(offer);
             } break;
             case TwoForAmount: {
-                NewOffer newOffer = (Product product1, double quantity, double unitPrice) -> {
+                Offer offer = (Product product1, double quantity, double unitPrice) -> {
                     if (product.equals(product1)) {
                         if ((int) quantity >= 2) {
                             double total = argument * (int) quantity / 2 + (int) quantity % 2 * unitPrice;
@@ -38,10 +38,10 @@ class Teller {
                     }
                     return Stream.empty();
                 };
-                addSpecialOffer(newOffer);
+                addSpecialOffer(offer);
             } break;
             case FiveForAmount: {
-                NewOffer newOffer = (Product product1, double quantity, double unitPrice) -> {
+                Offer offer = (Product product1, double quantity, double unitPrice) -> {
                     if (product.equals(product1)) {
                         int numberOfXs = (int) quantity / 5;
                         if ((int) quantity >= 5) {
@@ -51,10 +51,10 @@ class Teller {
                     }
                     return Stream.empty();
                 };
-                addSpecialOffer(newOffer);
+                addSpecialOffer(offer);
             } break;
             case TenPercentDiscount: {
-                NewOffer newOffer = (Product product1, double quantity, double unitPrice) -> {
+                Offer offer = (Product product1, double quantity, double unitPrice) -> {
                     if (product.equals(product1)) {
                         return Stream.of(new Discount(
                             product1,
@@ -64,14 +64,14 @@ class Teller {
                     }
                     return Stream.empty();
                 };
-                addSpecialOffer(newOffer);
+                addSpecialOffer(offer);
                 break;
             }
         }
     }
 
-    private void addSpecialOffer(NewOffer offer) {
-        newOffers = newOffers.and(offer);
+    private void addSpecialOffer(Offer offer) {
+        offers = offers.and(offer);
     }
 
     Receipt checksOutArticlesFrom(ShoppingCart theCart) {
@@ -84,7 +84,7 @@ class Teller {
             double price = quantity * unitPrice;
             receipt.addProduct(p, quantity, unitPrice, price);
         }
-        theCart.handleOffers(receipt, this.catalog, newOffers);
+        theCart.handleOffers(receipt, this.catalog, offers);
 
         return receipt;
     }

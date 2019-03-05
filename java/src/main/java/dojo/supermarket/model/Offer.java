@@ -2,11 +2,11 @@ package dojo.supermarket.model;
 
 import java.util.stream.Stream;
 
-public interface NewOffer {
+public interface Offer {
 
     Stream<Discount> getDiscounts(Product product, double quantity, double unitPrice);
 
-    default NewOffer and(NewOffer other) {
+    default Offer and(Offer other) {
         return (product, quantity, unitPrice) -> Stream.concat(
             this.getDiscounts(product, quantity, unitPrice),
             other.getDiscounts(product, quantity, unitPrice)
