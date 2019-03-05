@@ -2,6 +2,7 @@ package dojo.supermarket.model;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
 
 class Teller {
 
@@ -26,7 +27,11 @@ class Teller {
             double price = quantity * unitPrice;
             receipt.addProduct(p, quantity, unitPrice, price);
         }
-        theCart.handleOffers(receipt, this.offers, this.catalog);
+        NewOffer newOffer = (product, quantity, unitPrice) -> Stream.empty();
+        for (Offer offer: offers) {
+            newOffer = newOffer.and(offer.createNewOffer());
+        }
+        theCart.handleOffers(receipt, this.catalog, newOffer);
 
         return receipt;
     }

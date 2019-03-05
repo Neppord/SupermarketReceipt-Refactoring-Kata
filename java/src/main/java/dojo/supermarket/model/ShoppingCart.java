@@ -34,11 +34,7 @@ class ShoppingCart {
         }
     }
 
-    void handleOffers(Receipt receipt, List<Offer> offers, SupermarketCatalog catalog) {
-        NewOffer newOffer = (product, quantity, unitPrice) -> Stream.empty();
-        for (Offer offer: offers) {
-            newOffer = newOffer.and(offer.createNewOffer());
-        }
+    void handleOffers(Receipt receipt, SupermarketCatalog catalog, NewOffer newOffer) {
         for (Product product: productQuantities().keySet()) {
             Stream<Discount> discounts = newOffer.getDiscounts(
                     product,
