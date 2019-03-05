@@ -36,11 +36,13 @@ class ShoppingCart {
 
     void handleOffers(Receipt receipt, Map<Product, Offer> offers, SupermarketCatalog catalog) {
         for (Product product: productQuantities().keySet()) {
-            double quantity = productQuantities.get(product);
             if (offers.containsKey(product)) {
-                Offer offer = offers.get(product);
-                double unitPrice = catalog.getUnitPrice(product);
-                Stream<Discount> discounts = getDiscounts(product, quantity, offer, unitPrice);
+                Stream<Discount> discounts = getDiscounts(
+                    product,
+                    productQuantities.get(product),
+                    offers.get(product),
+                    catalog.getUnitPrice(product)
+                );
                 discounts.forEach(receipt::addDiscount);
             }
         }
