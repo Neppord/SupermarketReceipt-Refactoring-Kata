@@ -34,9 +34,9 @@ class ShoppingCart {
         }
     }
 
-    void handleOffers(Receipt receipt, Map<Product, Offer> offers, SupermarketCatalog catalog) {
+    void handleOffers(Receipt receipt, List<Offer> offers, SupermarketCatalog catalog) {
         for (Product product: productQuantities().keySet()) {
-            for (Offer offer: offers.values()) {
+            for (Offer offer: offers) {
                 if (offer.getProduct().equals(product)) {
                     Stream<Discount> discounts = getDiscounts(
                         product,
