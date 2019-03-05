@@ -37,49 +37,51 @@ class ShoppingCart {
     void handleOffers(Receipt receipt, List<Offer> offers, SupermarketCatalog catalog) {
         for (Product product: productQuantities().keySet()) {
             for (Offer offer: offers) {
-                if (offer.getProduct().equals(product)) {
-                    Stream<Discount> discounts = getDiscounts(
-                        offer,
+                Stream<Discount> discounts = createNewOffer(offer)
+                    .getDiscounts(
                         product,
                         productQuantities.get(product),
                         catalog.getUnitPrice(product)
                     );
-                    discounts.forEach(receipt::addDiscount);
-                }
+                discounts.forEach(receipt::addDiscount);
             }
         }
     }
 
-    private Stream<Discount> getDiscounts(Offer offer, Product product, double quantity, double unitPrice) {
-        if (offer.offerType == SpecialOfferType.ThreeForTwo) {
-            if ((int) quantity > 2) {
-                int numberOfXs = (int) quantity / 3;
-                double discountAmount = quantity * unitPrice - ((numberOfXs * 2 * unitPrice) + (int) quantity % 3 * unitPrice);
-                return Stream.of(new Discount(product, "3 for 2", discountAmount));
-            }
+    private NewOffer createNewOffer(Offer offer) {
+        return (Product product, double quantity, double unitPrice) -> {
+            if (offer.getProduct().equals(product)) {
+                if (offer.offerType == SpecialOfferType.ThreeForTwo) {
+                    if ((int) quantity > 2) {
+                        int numberOfXs = (int) quantity / 3;
+                        double discountAmount = quantity * unitPrice - ((numberOfXs * 2 * unitPrice) + (int) quantity % 3 * unitPrice);
+                        return Stream.of(new Discount(product, "3 for 2", discountAmount));
+                    }
 
-        } else if (offer.offerType == SpecialOfferType.TwoForAmount) {
-            if ((int) quantity >= 2) {
-                double total = offer.argument * (int) quantity / 2 + (int) quantity % 2 * unitPrice;
-                double discountN = unitPrice * quantity - total;
-                return Stream.of(new Discount(product, "2 for " + offer.argument, discountN));
-            }
+                } else if (offer.offerType == SpecialOfferType.TwoForAmount) {
+                    if ((int) quantity >= 2) {
+                        double total = offer.argument * (int) quantity / 2 + (int) quantity % 2 * unitPrice;
+                        double discountN = unitPrice * quantity - total;
+                        return Stream.of(new Discount(product, "2 for " + offer.argument, discountN));
+                    }
 
-        }
-        if (offer.offerType == SpecialOfferType.FiveForAmount) {
-            int numberOfXs = (int) quantity / 5;
-            if ((int) quantity >= 5) {
-                double discountTotal = unitPrice * quantity - (offer.argument * numberOfXs + (int) quantity % 5 * unitPrice);
-                return Stream.of(new Discount(product, 5 + " for " + offer.argument, discountTotal));
+                }
+                if (offer.offerType == SpecialOfferType.FiveForAmount) {
+                    int numberOfXs = (int) quantity / 5;
+                    if ((int) quantity >= 5) {
+                        double discountTotal = unitPrice * quantity - (offer.argument * numberOfXs + (int) quantity % 5 * unitPrice);
+                        return Stream.of(new Discount(product, 5 + " for " + offer.argument, discountTotal));
+                    }
+                }
+                if (offer.offerType == SpecialOfferType.TenPercentDiscount) {
+                    return Stream.of(new Discount(
+                        product,
+                        offer.argument + "% off",
+                        quantity * unitPrice * offer.argument / 100.0
+                    ));
+                }
             }
-        }
-        if (offer.offerType == SpecialOfferType.TenPercentDiscount) {
-            return Stream.of(new Discount(
-                product,
-                offer.argument + "% off",
-                quantity * unitPrice * offer.argument / 100.0
-            ));
-        }
-        return Stream.empty();
+            return Stream.empty();
+        };
     }
 }
