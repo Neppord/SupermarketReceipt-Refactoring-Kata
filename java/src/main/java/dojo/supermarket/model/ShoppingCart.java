@@ -39,9 +39,9 @@ class ShoppingCart {
             for (Offer offer: offers) {
                 if (offer.getProduct().equals(product)) {
                     Stream<Discount> discounts = getDiscounts(
+                        offer,
                         product,
                         productQuantities.get(product),
-                        offer,
                         catalog.getUnitPrice(product)
                     );
                     discounts.forEach(receipt::addDiscount);
@@ -50,7 +50,7 @@ class ShoppingCart {
         }
     }
 
-    private Stream<Discount> getDiscounts(Product product, double quantity, Offer offer, double unitPrice) {
+    private Stream<Discount> getDiscounts(Offer offer, Product product, double quantity, double unitPrice) {
         if (offer.offerType == SpecialOfferType.ThreeForTwo) {
             if ((int) quantity > 2) {
                 int numberOfXs = (int) quantity / 3;
