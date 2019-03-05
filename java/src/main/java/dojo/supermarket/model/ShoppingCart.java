@@ -35,14 +35,9 @@ class ShoppingCart {
     }
 
     void handleOffers(Receipt receipt, SupermarketCatalog catalog, Offer offer) {
-        for (Product product: productQuantities().keySet()) {
-            Stream<Discount> discounts = offer.getDiscounts(
-                    product,
-                    productQuantities.get(product),
-                    catalog.getUnitPrice(product)
-                );
-            discounts.forEach(receipt::addDiscount);
-        }
+        offer.toBundleOffer()
+            .getDiscounts(productQuantities, catalog)
+            .forEach(receipt::addDiscount);
     }
 
 }

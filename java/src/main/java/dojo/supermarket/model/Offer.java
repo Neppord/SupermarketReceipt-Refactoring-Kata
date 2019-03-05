@@ -12,4 +12,20 @@ public interface Offer {
             other.getDiscounts(product, quantity, unitPrice)
         );
     }
+
+    default BundleOffer toBundleOffer() {
+        return (productQuantities, catalog) ->
+            productQuantities
+            .entrySet()
+            .stream()
+            .flatMap(e -> {
+                Product product = e.getKey();
+                double quantity = e.getValue();
+                return getDiscounts(
+                    product,
+                    quantity,
+                    catalog.getUnitPrice(product)
+                );
+            });
+    }
 }
