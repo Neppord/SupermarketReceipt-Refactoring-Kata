@@ -1,10 +1,6 @@
 package dojo.supermarket.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
+import java.util.*;
 
 class ShoppingCart {
 
@@ -30,10 +26,7 @@ class ShoppingCart {
         }
     }
 
-    void handleOffers(Receipt receipt, SupermarketCatalog catalog, Offer offer) {
-        offer.toBundleOffer()
-            .getDiscounts(productQuantities, catalog)
-            .forEach(receipt::addDiscount);
+    public Map<Product, Double> getProductQuantities() {
+        return Collections.unmodifiableMap(productQuantities);
     }
-
 }

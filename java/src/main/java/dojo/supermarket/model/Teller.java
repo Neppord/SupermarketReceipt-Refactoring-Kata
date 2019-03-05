@@ -19,9 +19,14 @@ class Teller {
     Receipt checksOutArticlesFrom(ShoppingCart theCart) {
         Receipt receipt = new Receipt();
         handleProducts(theCart, receipt);
-        theCart.handleOffers(receipt, this.catalog, offers);
-
+        handleOffers(theCart, receipt);
         return receipt;
+    }
+
+    private void handleOffers(ShoppingCart theCart, Receipt receipt) {
+        offers.toBundleOffer()
+            .getDiscounts(theCart.getProductQuantities(), this.catalog)
+            .forEach(receipt::addDiscount);
     }
 
     private void handleProducts(ShoppingCart theCart, Receipt receipt) {
