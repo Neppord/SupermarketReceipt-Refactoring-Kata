@@ -15,7 +15,11 @@ class Teller {
 
     void addSpecialOffer(SpecialOfferType offerType, Product product, double argument) {
         Offer offer = new Offer(offerType, product, argument);
-        newOffers = newOffers.and(offer.createNewOffer());
+        addSpecialOffer(offer.createNewOffer());
+    }
+
+    private void addSpecialOffer(NewOffer offer) {
+        newOffers = newOffers.and(offer);
     }
 
     Receipt checksOutArticlesFrom(ShoppingCart theCart) {
