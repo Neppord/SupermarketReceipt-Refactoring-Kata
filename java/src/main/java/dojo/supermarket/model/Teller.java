@@ -28,14 +28,17 @@ class Teller {
             double price = quantity * unitPrice;
             receipt.addProduct(p, quantity, unitPrice, price);
         }
-        Optional<Discount> discountOptional = handleOffers(theCart);
-        theCart.handleOffers(receipt, this.offers, this.catalog);
-
+        List<Discount> discounts = handleOffers(theCart);
+        if (discounts.isEmpty()) {
+            theCart.handleOffers(receipt, this.offers, this.catalog);
+        } else {
+            discounts.forEach(receipt::addDiscount);
+        }
         return receipt;
     }
 
-    private Optional<Discount> handleOffers(ShoppingCart theCart) {
-        return Optional.empty();
+    private List<Discount> handleOffers(ShoppingCart theCart) {
+        return List.of();
     }
 
 }
