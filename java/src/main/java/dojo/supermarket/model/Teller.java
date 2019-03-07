@@ -3,6 +3,7 @@ package dojo.supermarket.model;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class Teller {
 
@@ -27,9 +28,14 @@ public class Teller {
             double price = quantity * unitPrice;
             receipt.addProduct(p, quantity, unitPrice, price);
         }
+        Optional<Discount> discountOptional = handleOffers(theCart);
         theCart.handleOffers(receipt, this.offers, this.catalog);
 
         return receipt;
+    }
+
+    private Optional<Discount> handleOffers(ShoppingCart theCart) {
+        return Optional.empty();
     }
 
 }
