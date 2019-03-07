@@ -5,20 +5,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class Teller {
+class Teller {
 
     private final SupermarketCatalog catalog;
     private Map<Product, Offer> offers = new HashMap<>();
 
-    public Teller(SupermarketCatalog catalog) {
+    Teller(SupermarketCatalog catalog) {
         this.catalog = catalog;
     }
 
-    public void addSpecialOffer(SpecialOfferType offerType, Product product, double argument) {
+    void addSpecialOffer(SpecialOfferType offerType, Product product, double argument) {
         this.offers.put(product, new Offer(offerType, product, argument));
     }
 
-    public Receipt checksOutArticlesFrom(ShoppingCart theCart) {
+    Receipt checksOutArticlesFrom(ShoppingCart theCart) {
         Receipt receipt = new Receipt();
         List<ProductQuantity> productQuantities = theCart.getItems();
         for (ProductQuantity pq: productQuantities) {
