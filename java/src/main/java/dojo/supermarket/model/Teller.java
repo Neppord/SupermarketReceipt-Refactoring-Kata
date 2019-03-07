@@ -47,21 +47,14 @@ class Teller {
                     double percentage = offer.argument;
                     double quantity = productQuantities.get(product);
                     double unitPrice = catalog.getUnitPrice(product);
-                    Optional<Discount> discount = calculateOptionalPercentageDiscount(product, percentage, quantity, unitPrice);
+                    Optional<Discount> discount = product
+                        .calculateOptionalPercentageDiscount(percentage, quantity, unitPrice);
                     return discount.stream().collect(Collectors.toList());
                 }
             }
         }
 
         return List.of();
-    }
-
-    private Optional<Discount> calculateOptionalPercentageDiscount(Product product, double percentage, double quantity, double unitPrice) {
-        return Optional.of(new Discount(
-                product,
-                percentage + "% off",
-                quantity * unitPrice * percentage / 100.0
-            ));
     }
 
 }

@@ -1,6 +1,7 @@
 package dojo.supermarket.model;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class Product {
     private final String name;
@@ -33,5 +34,13 @@ public class Product {
     public int hashCode() {
 
         return Objects.hash(name, unit);
+    }
+
+    Optional<Discount> calculateOptionalPercentageDiscount(double percentage, double quantity, double unitPrice) {
+        return Optional.of(new Discount(
+            this,
+                percentage + "% off",
+                quantity * unitPrice * percentage / 100.0
+            ));
     }
 }
