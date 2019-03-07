@@ -36,11 +36,17 @@ public class Product {
         return Objects.hash(name, unit);
     }
 
-    Optional<Discount> calculateOptionalPercentageDiscount(double percentage, double quantity, double unitPrice) {
-        return Optional.of(new Discount(
-            this,
-                percentage + "% off",
-                quantity * unitPrice * percentage / 100.0
-            ));
+    NewOffer createPercentageOffer(double percentage) {
+        return (product, q, u) -> {
+                if (this.equals(product)) {
+                    return Optional.of(new Discount(
+                        this,
+                        percentage + "% off",
+                        q * u * percentage / 100.0
+                    ));
+                } else {
+                    return Optional.empty();
+                }
+            };
     }
 }

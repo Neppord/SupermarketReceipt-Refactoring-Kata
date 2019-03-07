@@ -40,18 +40,19 @@ class Teller {
 
     private List<Discount> handleOffers(ShoppingCart theCart) {
         Map<Product, Double> productQuantities = theCart.productQuantities();
-        for (Product product : productQuantities.keySet()){
-            if (offers.containsKey(product)) {
-                Offer offer = this.offers.get(product);
-                if (offer.offerType == SpecialOfferType.TenPercentDiscount) {
-                    double percentage = offer.argument;
-                    double quantity = productQuantities.get(product);
-                    double unitPrice = catalog.getUnitPrice(product);
-                    Optional<Discount> discount = product
-                        .calculateOptionalPercentageDiscount(percentage, quantity, unitPrice);
-                    return discount.stream().collect(Collectors.toList());
-                }
+        NewOffer newOffer = (product, quantity, unitPrice) -> Optional.empty();
+        for(Offer offer: offers.values()) {
+            if (offer.offerType == SpecialOfferType.TenPercentDiscount) {
+                Product product = offer.getProduct();
+                newOffer = product.createPercentageOffer(offer.argument);
             }
+
+        }
+        for (Product product : productQuantities.keySet()){
+            double quantity = productQuantities.get(product);
+            double unitPrice = catalog.getUnitPrice(product);
+            Optional<Discount> discount = newOffer.calculateDiscount(product, quantity, unitPrice);
+            return discount.stream().collect(Collectors.toList());
         }
 
         return List.of();
