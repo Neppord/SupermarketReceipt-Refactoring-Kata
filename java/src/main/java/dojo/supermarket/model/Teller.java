@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 class Teller {
 
@@ -38,7 +39,29 @@ class Teller {
     }
 
     private List<Discount> handleOffers(ShoppingCart theCart) {
+        Map<Product, Double> productQuantities = theCart.productQuantities();
+        for (Product product : productQuantities.keySet()){
+            if (offers.containsKey(product)) {
+                Offer offer = this.offers.get(product);
+                if (offer.offerType == SpecialOfferType.TenPercentDiscount) {
+                    double percentage = offer.argument;
+                    double quantity = productQuantities.get(product);
+                    double unitPrice = catalog.getUnitPrice(product);
+                    Optional<Discount> discount = calculateOptionalPercentageDiscount(product, percentage, quantity, unitPrice);
+                    return discount.stream().collect(Collectors.toList());
+                }
+            }
+        }
+
         return List.of();
+    }
+
+    private Optional<Discount> calculateOptionalPercentageDiscount(Product product, double percentage, double quantity, double unitPrice) {
+        return Optional.of(new Discount(
+                product,
+                percentage + "% off",
+                quantity * unitPrice * percentage / 100.0
+            ));
     }
 
 }
